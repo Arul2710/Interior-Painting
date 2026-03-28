@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlTag" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>PaintMaster | Interior Painting Admin</title>
+    <link rel="icon" type="image/jpg" href="https://img.icons8.com/color/48/paint-roller.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="img/fav-icons1.png">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',      // Indigo - fresh & modern
+                        secondary: '#8b5cf6',    // Violet - creative touch
+                        warm: '#f97316',         // Orange accent for warmth
+                        clay: '#d4a373'          // Earthy tone
+                    },
+                    screens: {
+                        'xs': '475px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Logo Style - Warm to Indigo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #6366f1, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-active {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            color: #6366f1 !important;
+            font-weight: 700;
+        }
+
+        [dir="rtl"] .sidebar-active {
+            border-left: 0;
+            border-right: 4px solid #6366f1;
+        }
+
+        .custom-shadow {
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1);
+        }
+
+        .dark .custom-shadow {
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.2);
+        }
+
+        .paint-card {
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .dark .paint-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(30, 41, 59, 1) 100%);
+        }
+
+        .page-node {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .page-node.active {
+            display: block;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1023px) {
+            #sidebar {
+                width: 280px;
+                box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+            }
+        }
+
+        button,
+        a {
+            min-height: 44px;
+            min-width: 44px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 640px) {
+            table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+        .notification-item:hover {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 antialiased">
+
+    <!-- Mobile Overlay -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden transition-opacity duration-300"></div>
+
+    <div class="flex min-h-screen relative w-full overflow-x-hidden">
+        <!-- Sidebar - Interior Painting Theme -->
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-[280px] bg-white dark:bg-[#1E293B] text-gray-500 dark:text-gray-400 transition-all duration-300 ease-in-out lg:translate-x-0 -translate-x-full border-r border-indigo-100 dark:border-gray-700 overflow-y-auto">
+            <div class="p-5 h-full flex flex-col">
+
+                <!-- Logo - Paint & Color Consulting -->
+                <div class="flex items-center justify-between mb-8">
+                    <a href="index.html" class="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center shadow-md">
+                            <i class="fas fa-paint-roller text-white text-xl"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">ColorCraft</span>
+                    </a>
+
+                    <button onclick="toggleSidebar()"
+                        class="lg:hidden p-2 hover:bg-indigo-100 dark:hover:bg-gray-700 rounded-lg">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Tagline -->
+                <div
+                    class="mb-4 p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border border-primary/20 text-center">
+                    <span class="text-[8px] font-black text-primary uppercase tracking-widest">🎨 COLOR CONSULTING ·
+                        INTERIOR PAINTING</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 space-y-1 overflow-y-auto">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-primary/60 mb-3 ml-2">
+                        <i data-lucide="brush" class="w-3 h-3 inline mr-1"></i>
+                        PAINT STUDIO
+                    </p>
+
+                    <a href="javascript:void(0)" onclick="showPage('dashboard')" id="btn-dashboard"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl sidebar-active transition-all hover:bg-indigo-50 dark:hover:bg-white/5 group">
+                        <i data-lucide="palette"
+                            class="w-5 h-5 group-hover:scale-110 transition-transform text-primary"></i>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+
+                    <a href="javascript:void(0)" onclick="showPage('projects')" id="btn-projects"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                        <i data-lucide="home" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Active Projects</span>
+                        <span
+                            class="ml-auto bg-primary text-white text-[8px] font-black px-2 py-1 rounded-full">12</span>
+                    </a>
+
+                    <a href="javascript:void(0)" onclick="showPage('clients')" id="btn-clients"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                        <i data-lucide="users" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Clients</span>
+                        <span
+                            class="ml-auto bg-primary text-white text-[8px] font-black px-2 py-1 rounded-full">48</span>
+                    </a>
+
+                    <a href="javascript:void(0)" onclick="showPage('consultations')" id="btn-consultations"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                        <i data-lucide="message-square" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Color Consults</span>
+                        <span class="ml-auto bg-warm/20 text-warm text-[8px] font-black px-2 py-1 rounded-full">8
+                            new</span>
+                    </a>
+
+                    <a href="javascript:void(0)" onclick="showPage('portfolio')" id="btn-portfolio"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                        <i data-lucide="image" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Portfolio</span>
+                    </a>
+
+                    <!-- SETTINGS SECTION -->
+                    <div class="mt-6 pt-6 border-t border-indigo-200 dark:border-gray-700">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-primary/60 mb-3 ml-2">
+                            <i data-lucide="settings" class="w-3 h-3 inline mr-1"></i>
+                            STUDIO SETUP
+                        </p>
+
+                        <a href="javascript:void(0)" onclick="showPage('inventory')" id="btn-inventory"
+                            class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                            <i data-lucide="package" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium">Paint Inventory</span>
+                            <span
+                                class="ml-auto bg-primary text-white text-[8px] font-black px-2 py-1 rounded-full">Low</span>
+                        </a>
+
+                        <a href="javascript:void(0)" onclick="showPage('team')" id="btn-team"
+                            class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                            <i data-lucide="brush" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium">Painters Team</span>
+                        </a>
+
+                        <a href="javascript:void(0)" onclick="showPage('calendar')" id="btn-calendar"
+                            class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                            <i data-lucide="calendar" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                            <span class="font-medium">Schedule</span>
+                        </a>
+                    </div>
+                </nav>
+
+                <!-- Bottom Controls -->
+                <div class="pt-6 mt-6 border-t border-indigo-200 dark:border-gray-700">
+                    <div class="flex items-center justify-between bg-indigo-50 dark:bg-gray-800/50 p-2 rounded-2xl">
+                        <button onclick="toggleDirection()"
+                            class="p-2.5 hover:bg-white dark:hover:bg-gray-700 rounded-xl shadow-sm transition-all text-gray-400 hover:text-primary flex items-center gap-1">
+                            <i class="fa-solid fa-left-right text-xs"></i>
+                        </button>
+
+                        <button onclick="toggleDarkMode()"
+                            class="p-2.5 bg-white dark:bg-gray-700 rounded-xl text-primary shadow-sm hover:scale-110 transition-all">
+                            <i id="themeIcon" data-lucide="moon" class="w-4 h-4"></i>
+                        </button>
+
+                        <button class="p-2.5 bg-primary/10 rounded-xl text-primary hover:scale-110 transition-all">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Consultant Profile -->
+                    <div class="mt-4 p-3 bg-gradient-to-r from-primary/5 to-warm/5 rounded-xl border border-primary/10">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm">Elena Martinez</p>
+                                <p class="text-[9px] text-primary uppercase font-black tracking-widest">Sr. Color
+                                    Consultant</p>
+                                <p class="text-[7px] text-gray-500">elena@paintmaster.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main
+            class="flex-1 lg:ml-[280px] p-4 sm:p-5 md:p-6 lg:p-8 transition-all duration-300 w-full max-w-full overflow-x-hidden">
+
+            <!-- Header -->
+            <header class="flex items-center justify-between mb-6 sm:mb-8">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleSidebar()"
+                            class="lg:hidden p-2.5 bg-white dark:bg-[#1E293B] rounded-xl custom-shadow border border-indigo-200 dark:border-gray-700">
+                            <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-white"></i>
+                        </button>
+                        <div>
+                            <h1 id="pageTitle" class="text-xl sm:text-2xl font-black tracking-tight uppercase">DASHBOARD
+                            </h1>
+                            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium mt-0.5">
+                                <span class="text-primary font-black">🎨 Color Studio</span> · Interior Painting
+                                Management
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="flex items-center gap-2">
+                    <div
+                        class="hidden sm:flex items-center gap-2 bg-white dark:bg-[#1E293B] px-4 py-2 rounded-xl custom-shadow">
+                        <i data-lucide="clock" class="w-4 h-4 text-primary"></i>
+                        <span class="text-xs font-medium" id="liveTime">10:30 AM</span>
+                    </div>
+                    <button onclick="showPage('consultations')"
+                        class="w-10 h-10 rounded-full bg-warm/10 flex items-center justify-center relative">
+                        <i data-lucide="message-circle" class="w-5 h-5 text-warm"></i>
+                        <span
+                            class="absolute -top-1 -right-1 bg-warm text-white text-[8px] font-black px-1.5 py-0.5 rounded-full">8</span>
+                    </button>
+                </div>
+            </header>
+
+            
+            <!-- Hero Banner Added -->
+            <div class="mb-6">
+                <img src="img/home1-2.jpg" alt="Dashboard Cover" class="w-full h-48 lg:h-64 object-cover rounded-2xl shadow-sm">
+            </div>
+            <!-- PAGES - INTERIOR PAINTING THEMED -->
+            <div id="mainDisplay" class="space-y-6">
+
+                <!-- === DASHBOARD - PAINT STUDIO === -->
+                <div id="page-dashboard" class="page-node active">
+                    <!-- KPI Cards -->
+                    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                        <div
+                            class="paint-card bg-white dark:bg-[#1E293B] p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] custom-shadow border border-indigo-200 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-[9px] sm:text-[10px] font-black text-primary uppercase tracking-widest">
+                                    ACTIVE PROJECTS</p>
+                                <i class="fas fa-paint-roller text-primary text-lg"></i>
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">12</h3>
+                            <div class="mt-2 flex items-center gap-2">
+                                <i data-lucide="trending-up" class="w-3 h-3 text-green-600"></i>
+                                <p class="text-[9px] sm:text-[10px] text-gray-500">+3 this week</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="paint-card bg-white dark:bg-[#1E293B] p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] custom-shadow border border-indigo-200">
+                            <p class="text-[9px] sm:text-[10px] font-black text-primary uppercase tracking-widest mb-2">
+                                COLOR CONSULTS</p>
+                            <h3 class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">28</h3>
+                            <div class="mt-2 flex items-center gap-2">
+                                <i data-lucide="users" class="w-3 h-3 text-primary"></i>
+                                <p class="text-[9px] sm:text-[10px] text-gray-500">8 pending review</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="paint-card bg-white dark:bg-[#1E293B] p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] custom-shadow border border-indigo-200">
+                            <p class="text-[9px] sm:text-[10px] font-black text-primary uppercase tracking-widest mb-2">
+                                REVENUE (MTD)</p>
+                            <h3 class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">$47.2k</h3>
+                            <div class="mt-2 flex items-center gap-2">
+                                <i data-lucide="credit-card" class="w-3 h-3 text-primary"></i>
+                                <p class="text-[9px] sm:text-[10px] text-gray-500">+18% vs last month</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="paint-card bg-white dark:bg-[#1E293B] p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] custom-shadow border border-indigo-200">
+                            <p class="text-[9px] sm:text-[10px] font-black text-primary uppercase tracking-widest mb-2">
+                                SATISFACTION</p>
+                            <h3 class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">4.92 ★</h3>
+                            <div class="mt-2 flex items-center gap-2">
+                                <i data-lucide="star" class="w-3 h-3 text-yellow-500"></i>
+                                <p class="text-[9px] sm:text-[10px] text-gray-500">from 124 reviews</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts - Color Trends -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <div
+                            class="lg:col-span-2 paint-card bg-white dark:bg-[#1E293B] p-4 sm:p-6 rounded-2xl custom-shadow border border-indigo-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider">POPULAR COLOR
+                                    PALETTES</h4>
+                                <span class="px-2 py-1 bg-warm/10 text-warm rounded-lg text-[8px] font-black">Trending
+                                    2024</span>
+                            </div>
+                            <div class="h-[200px] sm:h-[250px]">
+                                <canvas id="colorTrendChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div
+                            class="paint-card bg-white dark:bg-[#1E293B] p-4 sm:p-6 rounded-2xl custom-shadow border border-indigo-200">
+                            <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider mb-4">FINISH PREFERENCE
+                            </h4>
+                            <div class="h-[200px] sm:h-[250px] flex items-center justify-center">
+                                <canvas id="finishChart"></canvas>
+                            </div>
+                            <div class="mt-4 grid grid-cols-2 gap-2 text-center">
+                                <div><span class="w-2 h-2 bg-primary rounded-full inline-block"></span> <span
+                                        class="text-[8px]">Matte (42%)</span></div>
+                                <div><span class="w-2 h-2 bg-secondary rounded-full inline-block"></span> <span
+                                        class="text-[8px]">Eggshell (35%)</span></div>
+                                <div><span class="w-2 h-2 bg-warm rounded-full inline-block"></span> <span
+                                        class="text-[8px]">Satin (23%)</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Consultations -->
+                    <div
+                        class="paint-card bg-white dark:bg-[#1E293B] p-4 sm:p-6 rounded-2xl custom-shadow border border-indigo-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider">📋 RECENT COLOR
+                                CONSULTATIONS</h4>
+                            <button onclick="showPage('consultations')"
+                                class="text-primary text-[9px] font-black uppercase hover:underline">View All</button>
+                        </div>
+                        <div class="space-y-3">
+                            <div
+                                class="flex items-center justify-between p-3 bg-indigo-50 dark:bg-gray-800/50 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-warm/20 flex items-center justify-center">
+                                        <i class="fas fa-palette text-warm text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold">Robert Chen · Living Room</p>
+                                        <div class="flex gap-2 mt-1">
+                                            <span class="color-swatch" style="background: #E6B8A2;"></span>
+                                            <span class="color-swatch" style="background: #5D6D5C;"></span>
+                                            <span class="text-[8px]">Warm Taupe + Sage Green</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-[9px] font-black text-warm">Today 2pm</span>
+                            </div>
+                            <div
+                                class="flex items-center justify-between p-3 bg-indigo-50 dark:bg-gray-800/50 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                                        <i class="fas fa-paint-roller text-primary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold">Sarah Miller · Master Bedroom</p>
+                                        <div class="flex gap-2 mt-1">
+                                            <span class="color-swatch" style="background: #9BB7D4;"></span>
+                                            <span class="color-swatch" style="background: #D9C8A9;"></span>
+                                            <span class="text-[8px]">Coastal Blue + Linen</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-[9px] font-black text-green-600">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === PROJECTS PAGE === -->
+                <div id="page-projects" class="page-node">
+                    <div class="paint-card bg-white dark:bg-[#1E293B] p-4 sm:p-6 rounded-2xl custom-shadow">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-black uppercase">ACTIVE PAINTING PROJECTS</h3>
+                            <button class="bg-primary text-white text-[10px] font-black px-4 py-2 rounded-xl">+ New
+                                Project</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="border-b border-indigo-200 text-[9px] uppercase font-black text-primary">
+                                    <tr>
+                                        <th>ROOM</th>
+                                        <th>CLIENT</th>
+                                        <th>COLORS</th>
+                                        <th>STATUS</th>
+                                        <th>PROGRESS</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-xs">
+                                    <tr class="border-b">
+                                        <td class="py-3">Kitchen</td>
+                                        <td>Johnson Family</td>
+                                        <td><span class="color-swatch" style="background:#C5A880;"></span> Greige</td>
+                                        <td><span class="status-badge bg-warm/20 text-warm">In Progress</span></td>
+                                        <td>65%</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="py-3">Master Suite</td>
+                                        <td>Linda Park</td>
+                                        <td><span class="color-swatch" style="background:#A7BEA4;"></span> Seafoam</td>
+                                        <td><span class="status-badge bg-primary/20 text-primary">Prep Work</span></td>
+                                        <td>20%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === CLIENTS PAGE === -->
+                <div id="page-clients" class="page-node">
+                    <div class="paint-card bg-white dark:bg-[#1E293B] p-6 rounded-2xl">
+                        <h3 class="text-lg font-black uppercase mb-4">CLIENT DIRECTORY</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-indigo-50 rounded-xl flex justify-between"><span class="font-bold">James
+                                    & Elena R.</span><span class="text-primary">2 projects</span></div>
+                            <div class="p-4 bg-indigo-50 rounded-xl flex justify-between"><span class="font-bold">The
+                                    Martins</span><span class="text-primary">Color Consult</span></div>
+                            <div class="p-4 bg-indigo-50 rounded-xl flex justify-between"><span class="font-bold">Patel
+                                    Residence</span><span class="text-primary">Full Interior</span></div>
+                            <div class="p-4 bg-indigo-50 rounded-xl flex justify-between"><span class="font-bold">Olivia
+                                    Chen</span><span class="text-primary">Quote Sent</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === COLOR CONSULTATIONS PAGE === -->
+                <div id="page-consultations" class="page-node">
+                    <div class="paint-card bg-white dark:bg-[#1E293B] p-6 rounded-2xl">
+                        <h3 class="text-lg font-black uppercase mb-4">🎨 PENDING COLOR CONSULTATIONS</h3>
+                        <div class="space-y-3">
+                            <div class="p-4 border-l-4 border-warm bg-warm/5 rounded-xl">
+                                <p class="font-bold">David Kim - Nursery</p>
+                                <p class="text-xs">Requested: Calming neutrals + accent wall ideas</p><button
+                                    class="mt-2 text-primary text-[9px] font-black">Review →</button>
+                            </div>
+                            <div class="p-4 border-l-4 border-primary bg-indigo-50/30 rounded-xl">
+                                <p class="font-bold">Aisha Patel - Home Office</p>
+                                <p class="text-xs">Focus colors: Deep teal & terracotta</p><button
+                                    class="mt-2 text-primary text-[9px]">Schedule Call</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === INVENTORY PAGE (Paint Stock) === -->
+                <div id="page-inventory" class="page-node">
+                    <div class="paint-card bg-white dark:bg-[#1E293B] p-6 rounded-2xl">
+                        <h3 class="text-lg font-black uppercase mb-4">🎨 PAINT INVENTORY</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-3 bg-red-50 rounded-xl"><span class="font-black">Benjamin Moore · Regal</span>
+                                <div class="w-full bg-gray-200 h-1 mt-2">
+                                    <div class="bg-warm w-[30%] h-1 rounded"></div>
+                                </div><span class="text-[9px]">Low Stock (8 gal left)</span>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-xl"><span class="font-black">Sherwin-Williams</span>
+                                <div class="w-full bg-gray-200 h-1 mt-2">
+                                    <div class="bg-primary w-[80%] h-1 rounded"></div>
+                                </div><span class="text-[9px]">Well Stocked</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placeholders for remaining pages -->
+                <div id="page-portfolio" class="page-node">
+                    <div class="paint-card p-6">
+                        <h3 class="font-black">🎨 Portfolio Gallery</h3>
+                        <p>Living room transformations, accent walls, complete makeovers</p>
+                    </div>
+                </div>
+                <div id="page-team" class="page-node">
+                    <div class="paint-card p-6">
+                        <h3 class="font-black">👨‍🎨 Painting Crew</h3>
+                        <p>Master painters, color specialists, 5 certified pros</p>
+                    </div>
+                </div>
+                <div id="page-calendar" class="page-node">
+                    <div class="paint-card p-6">
+                        <h3 class="font-black">📅 Schedule</h3>
+                        <p>This week: 3 consultations, 2 site visits</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleSidebar() { const s = document.getElementById('sidebar'); const o = document.getElementById('sidebarOverlay'); s.classList.toggle('-translate-x-full'); if (window.innerWidth < 1024 && o) o.classList.toggle('hidden'); lucide.createIcons(); }
+        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); localStorage.setItem('darkMode', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); lucide.createIcons(); }
+        if (localStorage.getItem('darkMode') === 'dark') document.documentElement.classList.add('dark');
+        function toggleDirection() { const html = document.getElementById('htmlTag'); html.dir = html.dir === 'rtl' ? 'ltr' : 'rtl'; if (window.revenueChart) window.revenueChart.update(); lucide.createIcons(); }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-node').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId)?.classList.add('active');
+            const titles = { dashboard: 'STUDIO DASHBOARD', projects: 'ACTIVE PROJECTS', clients: 'CLIENTS', consultations: 'COLOR CONSULTS', portfolio: 'PORTFOLIO', inventory: 'PAINT INVENTORY', team: 'PAINTERS TEAM', calendar: 'SCHEDULE' };
+            document.getElementById('pageTitle').innerText = titles[pageId] || pageId.toUpperCase();
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('sidebar-active'));
+            document.getElementById('btn-' + pageId)?.classList.add('sidebar-active');
+            if (window.innerWidth < 1024) toggleSidebar();
+        }
+
+        function updateLiveTime() { let d = new Date(); document.getElementById('liveTime') && (document.getElementById('liveTime').innerText = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' EST'); }
+        setInterval(updateLiveTime, 1000); updateLiveTime();
+
+        // Color Trends Chart
+        const colorCtx = document.getElementById('colorTrendChart')?.getContext('2d');
+        if (colorCtx) new Chart(colorCtx, { type: 'bar', data: { labels: ['Warm Neutrals', 'Sage Green', 'Terracotta', 'Navy Blue', 'Soft Gray'], datasets: [{ label: 'Projects', data: [24, 18, 14, 12, 20], backgroundColor: '#6366f1', borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+
+        const finishCtx = document.getElementById('finishChart')?.getContext('2d');
+        if (finishCtx) new Chart(finishCtx, { type: 'doughnut', data: { labels: ['Matte', 'Eggshell', 'Satin'], datasets: [{ data: [42, 35, 23], backgroundColor: ['#6366f1', '#8b5cf6', '#f97316'], borderWidth: 0 }] }, options: { cutout: '70%', plugins: { legend: { display: false } } } });
+
+        document.addEventListener('DOMContentLoaded', () => { showPage('dashboard'); lucide.createIcons(); });
+    </script>
+</body>
+
+</html>

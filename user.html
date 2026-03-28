@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlTag" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>ColorStudio | Client Portal - Interior Painting & Color Consulting</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/paint-palette.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="img/fav-icons1.png">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',      // Indigo - fresh & modern
+                        secondary: '#8b5cf6',    // Violet - creative touch
+                        warm: '#f59e0b',         // Amber - warm accent
+                        earth: '#a16207'         // Earth tone
+                    },
+                    screens: {
+                        'xs': '475px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+            background: #FDF8F0;
+        }
+
+        .dark body {
+            background: #0F172A;
+        }
+
+        /* Logo Style - Warm to Indigo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #6366f1, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-active {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            color: #6366f1 !important;
+            font-weight: 700;
+        }
+
+        [dir="rtl"] .sidebar-active {
+            border-left: 0;
+            border-right: 4px solid #6366f1;
+        }
+
+        .custom-shadow {
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1);
+        }
+
+        .dark .custom-shadow {
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.2);
+        }
+
+        .page-node {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .page-node.active {
+            display: block;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1023px) {
+            #sidebar {
+                width: 280px;
+                box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+            }
+        }
+
+        button,
+        a {
+            min-height: 44px;
+            min-width: 44px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 640px) {
+            table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .color-swatch {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-right: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .project-card {
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -12px rgba(99, 102, 241, 0.2);
+        }
+    </style>
+</head>
+
+<body class="bg-amber-50 dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 antialiased">
+
+    <!-- Mobile Overlay -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden transition-opacity duration-300"></div>
+
+    <div class="flex min-h-screen relative w-full overflow-x-hidden">
+        <!-- Sidebar - Client Portal for Painting & Color Consulting -->
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-[280px] bg-white dark:bg-[#1E293B] text-gray-500 dark:text-gray-400 transition-all duration-300 ease-in-out lg:translate-x-0 -translate-x-full border-r border-indigo-100 dark:border-gray-700 overflow-y-auto">
+            <div class="p-5 h-full flex flex-col">
+
+                <!-- Logo - Paint Studio -->
+                <div class="flex items-center justify-between mb-8">
+                    <a href="index.html" class="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center shadow-md">
+                            <i class="fas fa-paint-roller text-white text-xl"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">ColorCraft</span>
+                    </a>
+
+                    <button onclick="toggleSidebar()"
+                        class="lg:hidden p-2 hover:bg-indigo-100 dark:hover:bg-gray-700 rounded-lg">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Client Profile Card -->
+                <div
+                    class="bg-gradient-to-r from-primary/10 to-amber-50 dark:from-primary/5 dark:to-gray-800 p-4 rounded-2xl mb-6 border border-primary/20">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-xl">
+                            <i class="fas fa-palette text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-black text-gray-900 dark:text-white">Sarah Mitchell</p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">sarah.m@homedesign.com</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                <span class="text-[8px] font-bold text-green-600 uppercase">Active Project</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Badge -->
+                <div class="mb-4 p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-warm/20 text-center">
+                    <span class="text-[8px] font-black text-warm uppercase tracking-widest">🎨 Premium Color
+                        Consultation • Since 2024</span>
+                </div>
+
+                <!-- Client Navigation Menu - 5 Main Sections for Painting Clients -->
+                <nav class="flex-1 space-y-1 overflow-y-auto">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-primary/60 mb-3 ml-2">
+                        <i data-lucide="brush" class="w-3 h-3 inline mr-1"></i>
+                        MY COLOR STUDIO
+                    </p>
+
+                    <!-- 1. Dashboard / Overview -->
+                    <a href="javascript:void(0)" onclick="showPage('dashboard')" id="btn-dashboard"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl sidebar-active transition-all hover:bg-indigo-50 dark:hover:bg-white/5 group">
+                        <i data-lucide="home"
+                            class="w-5 h-5 group-hover:scale-110 transition-transform text-primary"></i>
+                        <span class="font-medium">Dashboard</span>
+                        <span
+                            class="ml-auto bg-primary/10 text-primary text-[8px] font-black px-2 py-1 rounded-full">Active</span>
+                    </a>
+
+                    <!-- 2. My Projects / Paint Jobs -->
+                    <a href="javascript:void(0)" onclick="showPage('projects')" id="btn-projects"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                        <i data-lucide="paintbrush-2" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">My Projects</span>
+                        <span class="ml-auto bg-warm/20 text-warm text-[8px] font-black px-2 py-1 rounded-full">2
+                            Active</span>
+                    </a>
+
+                    <!-- 3. Color Consultations -->
+                    <a href="javascript:void(0)" onclick="showPage('consultations')" id="btn-consultations"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                        <i data-lucide="message-square" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Color Consults</span>
+                        <span
+                            class="ml-auto bg-primary text-white text-[8px] font-black px-2 py-1 rounded-full">Upcoming</span>
+                    </a>
+
+                    <!-- 4. Color Palette Library -->
+                    <a href="javascript:void(0)" onclick="showPage('palettes')" id="btn-palettes"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                        <i data-lucide="palette" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Color Library</span>
+                        <span class="ml-auto bg-primary/10 text-primary text-[8px] font-black px-2 py-1 rounded-full">24
+                            Palettes</span>
+                    </a>
+
+                    <!-- 5. Account Settings -->
+                    <a href="javascript:void(0)" onclick="showPage('settings')" id="btn-settings"
+                        class="nav-btn flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-white/5 transition-all group">
+                        <i data-lucide="settings" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Account Settings</span>
+                    </a>
+                </nav>
+
+                <!-- Bottom Controls -->
+                <div class="pt-6 mt-6 border-t border-indigo-200 dark:border-gray-700">
+                    <div class="flex items-center justify-between bg-amber-50 dark:bg-gray-800/50 p-2 rounded-2xl">
+                        <button onclick="toggleDirection()"
+                            class="p-2.5 hover:bg-white dark:hover:bg-gray-700 rounded-xl shadow-sm transition-all text-gray-400 hover:text-primary flex items-center gap-1">
+                            <i class="fa-solid fa-left-right"></i>
+                        </button>
+
+                        <button onclick="toggleDarkMode()"
+                            class="p-2.5 bg-white dark:bg-gray-700 rounded-xl text-primary shadow-sm hover:scale-110 transition-all">
+                            <i id="themeIcon" data-lucide="moon" class="w-4 h-4"></i>
+                        </button>
+                        <button class="p-2.5 bg-primary/10 rounded-xl text-primary hover:scale-110 transition-all">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Color Consultant Info -->
+                    <div
+                        class="mt-4 p-3 bg-gradient-to-r from-primary/10 to-amber-100 dark:from-primary/5 dark:to-gray-800 rounded-xl border border-primary/20">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="star" class="w-4 h-4 text-warm"></i>
+                            <p class="text-[9px] font-black uppercase tracking-wider">Your Color Consultant: Elena</p>
+                        </div>
+                        <p class="text-[8px] text-gray-500 mt-1">Available for virtual consultation</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main
+            class="flex-1 lg:ml-[280px] p-4 sm:p-5 md:p-6 lg:p-8 transition-all duration-300 w-full max-w-full overflow-x-hidden">
+
+            <!-- Header -->
+            <header class="flex items-center justify-between mb-6 sm:mb-8">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleSidebar()"
+                            class="lg:hidden p-2.5 bg-white dark:bg-[#1E293B] rounded-xl custom-shadow border border-indigo-200 dark:border-gray-700">
+                            <i id="menuIcon" data-lucide="menu"
+                                class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-white"></i>
+                        </button>
+                        <div>
+                            <h1 id="pageTitle" class="text-xl sm:text-2xl font-black tracking-tight uppercase">COLOR
+                                STUDIO</h1>
+                            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium mt-0.5">
+                                <span class="text-primary font-black">Welcome back, Sarah!</span> · Your color journey
+                                continues
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="flex items-center gap-2">
+                    <div
+                        class="hidden sm:flex items-center gap-2 bg-white dark:bg-[#1E293B] px-4 py-2 rounded-xl custom-shadow">
+                        <i data-lucide="palette" class="w-4 h-4 text-primary"></i>
+                        <span class="text-xs font-medium">Inspired Palette</span>
+                    </div>
+                    <div
+                        class="w-10 h-10 rounded-full bg-warm/20 flex items-center justify-center border-2 border-warm/30">
+                        <i class="fas fa-paint-roller text-warm text-sm"></i>
+                    </div>
+                </div>
+            </header>
+
+            
+            <!-- Hero Banner Added -->
+            <div class="mb-6">
+                <img src="img/home1-2.jpg" alt="Dashboard Cover" class="w-full h-48 lg:h-64 object-cover rounded-2xl shadow-sm">
+            </div>
+            <!-- CLIENT PAGES - INTERIOR PAINTING & COLOR CONSULTING THEMED -->
+            <div id="mainDisplay" class="space-y-6">
+
+                <!-- === 1. DASHBOARD / OVERVIEW PAGE === -->
+                <div id="page-dashboard" class="page-node active">
+                    <!-- Welcome Banner -->
+                    <div
+                        class="bg-gradient-to-r from-primary/10 to-amber-100 dark:from-primary/5 dark:to-gray-800 p-5 rounded-2xl mb-6 border border-primary/20">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div>
+                                <h2 class="text-lg font-black">🎨 Your Color Journey</h2>
+                                <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">Your living room transformation
+                                    is in progress. Next consultation: Tomorrow at 2 PM</p>
+                            </div>
+                            <button onclick="showPage('consultations')"
+                                class="bg-primary text-white text-[10px] font-black px-5 py-2.5 rounded-xl whitespace-nowrap">
+                                View Schedule →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards - Painting Metrics -->
+                    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                        <div
+                            class="bg-white dark:bg-[#1E293B] p-4 rounded-2xl custom-shadow border border-indigo-200 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-[9px] font-black text-primary uppercase tracking-widest">ACTIVE PROJECTS
+                                </p>
+                                <i class="fas fa-paint-roller text-primary text-lg"></i>
+                            </div>
+                            <h3 class="text-2xl font-black">2</h3>
+                            <p class="text-[9px] text-gray-500 mt-1">Living Room · Master Bedroom</p>
+                        </div>
+
+                        <div class="bg-white dark:bg-[#1E293B] p-4 rounded-2xl custom-shadow border border-indigo-200">
+                            <p class="text-[9px] font-black text-primary uppercase tracking-widest mb-2">COLOR CONSULTS
+                            </p>
+                            <h3 class="text-2xl font-black">3</h3>
+                            <p class="text-[9px] text-gray-500">Completed · 1 Upcoming</p>
+                        </div>
+
+                        <div class="bg-white dark:bg-[#1E293B] p-4 rounded-2xl custom-shadow border border-indigo-200">
+                            <p class="text-[9px] font-black text-primary uppercase tracking-widest mb-2">PALETTE
+                                FAVORITES</p>
+                            <h3 class="text-2xl font-black">8</h3>
+                            <p class="text-[9px] text-gray-500">Saved color schemes</p>
+                        </div>
+
+                        <div class="bg-white dark:bg-[#1E293B] p-4 rounded-2xl custom-shadow border border-indigo-200">
+                            <p class="text-[9px] font-black text-primary uppercase tracking-widest mb-2">PROJECT
+                                PROGRESS</p>
+                            <h3 class="text-2xl font-black">65%</h3>
+                            <p class="text-[9px] text-gray-500">Living Room Completion</p>
+                        </div>
+                    </div>
+
+                    <!-- Current Project Spotlight -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white dark:bg-[#1E293B] p-5 rounded-2xl custom-shadow border border-indigo-200">
+                            <h3 class="text-sm font-black uppercase mb-4 flex items-center gap-2">
+                                <i data-lucide="home" class="w-4 h-4 text-primary"></i>
+                                Current Project: Living Room
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-[10px] font-bold mb-1">
+                                        <span>Color Selection</span>
+                                        <span>70%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width:70%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 flex-wrap">
+                                    <div class="flex items-center gap-2"><span class="color-swatch"
+                                            style="background: #C5A572;"></span><span class="text-xs">Warm Taupe</span>
+                                    </div>
+                                    <div class="flex items-center gap-2"><span class="color-swatch"
+                                            style="background: #7C9A6E;"></span><span class="text-xs">Sage Green</span>
+                                    </div>
+                                    <div class="flex items-center gap-2"><span class="color-swatch"
+                                            style="background: #E8D5B5;"></span><span class="text-xs">Cream
+                                            Accent</span></div>
+                                </div>
+                                <p class="text-[10px] text-gray-500 mt-2">Next step: Paint sample testing scheduled for
+                                    Friday</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-[#1E293B] p-5 rounded-2xl custom-shadow border border-indigo-200">
+                            <h3 class="text-sm font-black uppercase mb-4 flex items-center gap-2">
+                                <i data-lucide="calendar" class="w-4 h-4 text-primary"></i>
+                                Upcoming Consultation
+                            </h3>
+                            <div class="bg-amber-50 dark:bg-gray-800/50 p-4 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-warm/20 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-video text-warm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-black text-sm">Virtual Color Consultation</p>
+                                        <p class="text-[10px] text-gray-500">Tomorrow, 2:00 PM EST</p>
+                                        <p class="text-[8px] text-primary mt-1">With Elena, Senior Color Consultant</p>
+                                    </div>
+                                </div>
+                                <button
+                                    class="mt-3 w-full bg-primary/10 text-primary text-[10px] font-black py-2 rounded-lg">Join
+                                    Meeting</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Color Recommendations -->
+                    <div class="bg-white dark:bg-[#1E293B] p-5 rounded-2xl custom-shadow border border-indigo-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-black uppercase">🎨 Recent Color Recommendations</h3>
+                            <button onclick="showPage('palettes')" class="text-primary text-[9px] font-black">View All
+                                →</button>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="text-center p-3 bg-indigo-50 dark:bg-gray-800/50 rounded-xl">
+                                <div class="w-full h-16 rounded-lg mb-2" style="background: #B6C8A2;"></div>
+                                <p class="text-[10px] font-bold">Seafoam Mist</p>
+                                <p class="text-[7px] text-gray-500">Calming Green</p>
+                            </div>
+                            <div class="text-center p-3 bg-indigo-50 dark:bg-gray-800/50 rounded-xl">
+                                <div class="w-full h-16 rounded-lg mb-2" style="background: #D9B48B;"></div>
+                                <p class="text-[10px] font-bold">Terracotta Clay</p>
+                                <p class="text-[7px] text-gray-500">Warm Earth</p>
+                            </div>
+                            <div class="text-center p-3 bg-indigo-50 dark:bg-gray-800/50 rounded-xl">
+                                <div class="w-full h-16 rounded-lg mb-2" style="background: #7B8A9B;"></div>
+                                <p class="text-[10px] font-bold">Storm Blue</p>
+                                <p class="text-[7px] text-gray-500">Serene Accent</p>
+                            </div>
+                            <div class="text-center p-3 bg-indigo-50 dark:bg-gray-800/50 rounded-xl">
+                                <div class="w-full h-16 rounded-lg mb-2" style="background: #E8C39E;"></div>
+                                <p class="text-[10px] font-bold">Warm Almond</p>
+                                <p class="text-[7px] text-gray-500">Neutral Base</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === 2. MY PROJECTS PAGE === -->
+                <div id="page-projects" class="page-node">
+                    <div class="bg-white dark:bg-[#1E293B] p-6 rounded-2xl custom-shadow border border-indigo-200">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-black uppercase flex items-center gap-2">
+                                <i data-lucide="paintbrush-2" class="w-5 h-5 text-primary"></i>
+                                My Painting Projects
+                            </h3>
+                            <button class="bg-primary text-white text-[10px] font-black px-4 py-2 rounded-xl">+ New
+                                Project</button>
+                        </div>
+
+                        <!-- Project Cards -->
+                        <div class="space-y-4">
+                            <div
+                                class="project-card p-4 bg-indigo-50 dark:bg-gray-800/50 rounded-xl border border-indigo-100 dark:border-gray-700">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                                            <i class="fas fa-couch text-primary text-xl"></i></div>
+                                        <div>
+                                            <h4 class="font-black">Living Room Makeover</h4>
+                                            <p class="text-[9px] text-gray-500">Started: Feb 15, 2024</p>
+                                            <div class="flex gap-2 mt-1"><span class="color-swatch"
+                                                    style="background:#C5A572;"></span><span class="color-swatch"
+                                                    style="background:#7C9A6E;"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="status-badge bg-warm/20 text-warm">In Progress</span>
+                                        <p class="text-[10px] font-bold mt-1">65% Complete</p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3">
+                                    <div class="bg-primary h-1.5 rounded-full" style="width:65%"></div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="project-card p-4 bg-indigo-50 dark:bg-gray-800/50 rounded-xl border border-indigo-100">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 rounded-xl bg-warm/20 flex items-center justify-center"><i
+                                                class="fas fa-bed text-warm text-xl"></i></div>
+                                        <div>
+                                            <h4 class="font-black">Master Bedroom Retreat</h4>
+                                            <p class="text-[9px] text-gray-500">Color Consultation Completed</p>
+                                            <div class="flex gap-2 mt-1"><span class="color-swatch"
+                                                    style="background:#9BB7D4;"></span><span class="color-swatch"
+                                                    style="background:#D9C8A9;"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="status-badge bg-primary/20 text-primary">Planning Phase</span>
+                                        <p class="text-[10px] font-bold mt-1">20% Complete</p>
+                                    </div>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3">
+                                    <div class="bg-primary h-1.5 rounded-full" style="width:20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === 3. COLOR CONSULTATIONS PAGE === -->
+                <div id="page-consultations" class="page-node">
+                    <div class="bg-white dark:bg-[#1E293B] p-6 rounded-2xl custom-shadow border border-indigo-200">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                            <i data-lucide="message-square" class="w-5 h-5 text-primary"></i>
+                            Color Consultations
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div
+                                class="p-4 bg-gradient-to-r from-primary/5 to-amber-50 dark:from-primary/5 dark:to-gray-800 rounded-xl border-l-4 border-primary">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <p class="font-black text-sm">Virtual Color Consultation - Living Room</p>
+                                        <p class="text-[10px] text-gray-500 mt-1">Tomorrow · 2:00 PM EST · 30 min
+                                            session</p>
+                                        <p class="text-[9px] mt-2">🎨 Topics: Final paint selection, accent wall ideas
+                                        </p>
+                                    </div>
+                                    <button
+                                        class="bg-primary text-white text-[9px] font-black px-3 py-1.5 rounded-lg">Join</button>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-gray-50 dark:bg-gray-800/30 rounded-xl">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <p class="font-black text-sm">Completed: Color Palette Presentation</p>
+                                        <p class="text-[10px] text-gray-500">March 10, 2024 · with Elena</p>
+                                        <p class="text-[9px] text-green-600 mt-1">✓ Approved palette: Warm Neutrals
+                                            Collection</p>
+                                    </div>
+                                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-indigo-100">
+                            <button
+                                class="w-full bg-primary/10 text-primary text-[10px] font-black py-3 rounded-xl">Schedule
+                                New Consultation</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === 4. COLOR LIBRARY PAGE === -->
+                <div id="page-palettes" class="page-node">
+                    <div class="bg-white dark:bg-[#1E293B] p-6 rounded-2xl custom-shadow border border-indigo-200">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                            <i data-lucide="palette" class="w-5 h-5 text-primary"></i>
+                            My Color Palette Library
+                        </h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl border border-indigo-100 hover:shadow-md transition">
+                                <div class="flex gap-2 mb-3">
+                                    <div class="w-10 h-10 rounded-lg" style="background:#C5A572;"></div>
+                                    <div class="w-10 h-10 rounded-lg" style="background:#7C9A6E;"></div>
+                                    <div class="w-10 h-10 rounded-lg" style="background:#E8D5B5;"></div>
+                                    <div class="w-10 h-10 rounded-lg" style="background:#A67B5B;"></div>
+                                </div>
+                                <p class="font-black text-sm">Warm Earth Collection</p>
+                                <p class="text-[8px] text-gray-500">Perfect for living rooms · 4 colors</p>
+                                <button class="mt-2 text-primary text-[8px] font-black">Save to Favorites</button>
+                            </div>
+                            <div class="p-4 rounded-xl border border-indigo-100 hover:shadow-md transition">
+                                <div class="flex gap-2 mb-3">
+                                    <div class="w-10 h-10 rounded-lg" style="background:#9BB7D4;"></div>
+                                    <div class="w-10 h-10 rounded-lg" style="background:#D9C8A9;"></div>
+                                    <div class="w-10 h-10 rounded-lg" style="background:#A2B9C2;"></div>
+                                </div>
+                                <p class="font-black text-sm">Coastal Serenity</p>
+                                <p class="text-[8px] text-gray-500">Bedroom inspired · 3 colors</p>
+                                <button class="mt-2 text-primary text-[8px] font-black">Save to Favorites</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === 5. ACCOUNT SETTINGS PAGE === -->
+                <div id="page-settings" class="page-node">
+                    <div class="bg-white dark:bg-[#1E293B] p-6 rounded-2xl custom-shadow border border-indigo-200">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                            <i data-lucide="settings" class="w-5 h-5 text-primary"></i>
+                            Account Settings
+                        </h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="text-[10px] font-black text-primary uppercase">Full Name</label>
+                                <input type="text" value="Sarah Mitchell"
+                                    class="w-full mt-1 px-4 py-2 bg-amber-50 dark:bg-gray-800 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-primary uppercase">Email Address</label>
+                                <input type="email" value="sarah.m@homedesign.com"
+                                    class="w-full mt-1 px-4 py-2 bg-amber-50 dark:bg-gray-800 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-primary uppercase">Phone Number</label>
+                                <input type="tel" value="+1 (415) 555-9876"
+                                    class="w-full mt-1 px-4 py-2 bg-amber-50 dark:bg-gray-800 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-primary uppercase">Notification
+                                    Preferences</label>
+                                <div class="mt-2 space-y-2">
+                                    <label class="flex items-center gap-2"><input type="checkbox" checked
+                                            class="rounded text-primary"> <span class="text-xs">Email: Color tips &
+                                            inspiration</span></label>
+                                    <label class="flex items-center gap-2"><input type="checkbox" checked
+                                            class="rounded text-primary"> <span class="text-xs">SMS: Consultation
+                                            reminders</span></label>
+                                </div>
+                            </div>
+                            <button class="bg-primary text-white text-xs font-black py-3 rounded-xl w-full">Save
+                                Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('-translate-x-full');
+            if (window.innerWidth < 1024 && overlay) overlay.classList.toggle('hidden');
+            lucide.createIcons();
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            lucide.createIcons();
+        }
+
+        if (localStorage.getItem('darkMode') === 'dark') document.documentElement.classList.add('dark');
+
+        function toggleDirection() {
+            const html = document.getElementById('htmlTag');
+            html.dir = html.dir === 'rtl' ? 'ltr' : 'rtl';
+            lucide.createIcons();
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-node').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId)?.classList.add('active');
+
+            const titles = {
+                dashboard: 'COLOR STUDIO',
+                projects: 'MY PROJECTS',
+                consultations: 'COLOR CONSULTS',
+                palettes: 'COLOR LIBRARY',
+                settings: 'SETTINGS'
+            };
+            document.getElementById('pageTitle').innerText = titles[pageId] || pageId.toUpperCase();
+
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('sidebar-active'));
+            document.getElementById('btn-' + pageId)?.classList.add('sidebar-active');
+            if (window.innerWidth < 1024) toggleSidebar();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.createElement('div');
+            overlay.id = 'sidebarOverlay';
+            overlay.className = 'fixed inset-0 bg-black/50 z-40 hidden lg:hidden transition-opacity duration-300';
+            overlay.onclick = toggleSidebar;
+            document.body.appendChild(overlay);
+            showPage('dashboard');
+            lucide.createIcons();
+        });
+    </script>
+</body>
+
+</html>

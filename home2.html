@@ -1,0 +1,893 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColorCraft - About Us | Professional Painting & Color Consulting</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="img/fav-icons1.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom CSS for active states and navbar enhancements */
+        .nav-link {
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #6366f1 !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active-nav-link::after {
+            width: 100%;
+        }
+
+        /* Active link style for desktop */
+        .nav-link.active-nav-link {
+            color: #6366f1 !important;
+            font-weight: 500;
+        }
+
+        /* Dropdown active item styling */
+        .dropdown-item.active-dropdown-item,
+        .home-drop-item.active-dropdown-item,
+        .dashboard-drop-item.active-dropdown-item {
+            background-color: rgba(99, 102, 241, 0.1) !important;
+            color: #6366f1 !important;
+            font-weight: 500;
+        }
+
+        /* Mobile menu active states */
+        .mobile-link-active {
+            color: #6366f1 !important;
+            background-color: rgba(99, 102, 241, 0.1) !important;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+
+        .group .absolute a:hover,
+        .group .absolute a.active-dropdown-item,
+        #mobileMenu a.block:not(.border-2):not(.gradient-bg):hover,
+        #mobileMenu a.block:not(.border-2):not(.gradient-bg).mobile-link-active,
+        #mobileMenu button.w-full:hover,
+        #mobileMenu button.w-full.mobile-link-active {
+            color: #6366f1 !important;
+            background-color: rgba(99, 102, 241, 0.1) !important;
+            border-radius: 0.5rem;
+        }
+
+        /* Mobile Menu Styles - Fixed Open/Close */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            visibility: hidden;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        /* Overlay for mobile menu */
+        .mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 55;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+
+        /* About page specific animations */
+        .about-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .about-card:hover .about-icon {
+            transform: scale(1.1);
+        }
+
+        /* Prevent body scroll when mobile menu is open */
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        /* Hero Section Gradient Enhancement */
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Stats Counter Styling */
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Team hover effects */
+        .team-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-100">
+
+    <!-- Navigation Bar -->
+    <nav id="navbar"
+        class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <a href="home2.html" class="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                    <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center shadow-md">
+                        <i class="fas fa-paint-roller text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">ColorCraft</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center gap-8">
+                    <!-- Home Dropdown -->
+                    <div class="relative group">
+                        <button id="desktopHomeBtn"
+                            class="nav-link flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-primary transition py-6">
+                            Home <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <div
+                            class="absolute top-full left-0 w-40 bg-white dark:bg-slate-800 shadow-xl rounded-b-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-2 border-primary z-50">
+                            <a href="index.html"
+                                class="home-drop-item block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary transition"
+                                data-page="index">Home 1</a>
+                            <a href="home2.html"
+                                class="home-drop-item block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary transition"
+                                data-page="home2">Home 2</a>
+                        </div>
+                    </div>
+
+                    <a href="about.html" class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
+                        data-page="about">About</a>
+                    <a href="services.html"
+                        class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
+                        data-page="services">Services</a>
+                    <a href="booking.html"
+                        class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
+                        data-page="booking">Booking</a>
+                    <a href="pricing.html"
+                        class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
+                        data-page="pricing">Pricing</a>
+                    <a href="contact.html"
+                        class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
+                        data-page="contact">Contact</a>
+
+                    <!-- Dashboard Dropdown -->
+                    <div class="relative group">
+                        <button id="desktopDashboardBtn"
+                            class="nav-link flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-primary transition py-6">
+                            Dashboard <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <div
+                            class="absolute top-full left-0 w-40 bg-white dark:bg-slate-800 shadow-xl rounded-b-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-2 border-primary z-50">
+                            <a href="admin.html"
+                                class="dashboard-drop-item block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary transition"
+                                data-page="admin">Admin</a>
+                            <a href="user.html"
+                                class="dashboard-drop-item block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary transition"
+                                data-page="user">User</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desktop Right Buttons -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <button id="ltrToggle"
+                        class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-text-width"></i>
+                    </button>
+                    <button class="darkModeBtn p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+                        <i class="fas fa-sun sun-icon text-yellow-500 hidden dark:block"></i>
+                        <i class="fas fa-moon moon-icon text-gray-600 block dark:hidden"></i>
+                    </button>
+                    <a href="login.html"
+                        class="px-4 py-2 text-primary font-medium hover:bg-primary/10 rounded-lg transition">Login</a>
+                    <a href="signup.html"
+                        class="px-4 py-2 gradient-bg text-white font-medium rounded-lg hover:opacity-90 transition shadow-sm">Sign
+                        Up</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn"
+                    class="lg:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay"></div>
+
+    <!-- Mobile Menu Sidebar -->
+    <div id="mobileMenu"
+        class="mobile-menu fixed top-0 right-0 bottom-0 w-80 max-w-[85%] z-[60] bg-white dark:bg-slate-900 shadow-2xl overflow-y-auto">
+        <div
+            class="sticky top-0 bg-white dark:bg-slate-900 z-10 p-4 flex justify-between items-center border-b dark:border-slate-700">
+            <a href="home2.html" class="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                    <i class="fas fa-paint-roller text-white text-xl"></i>
+                </div>
+                <span class="text-xl font-bold gradient-text">ColorCraft</span>
+            </a>
+            <button id="closeMenuBtn" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+
+        <div class="p-4 space-y-2 pb-8">
+            <!-- Mobile Home Dropdown -->
+            <div class="border-b dark:border-slate-800 pb-2">
+                <button id="mobileHomeToggle"
+                    class="w-full flex justify-between items-center py-3 px-4 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition">
+                    Home <i class="fas fa-chevron-down text-xs transition-transform duration-200"
+                        id="homeMobileIcon"></i>
+                </button>
+                <div id="homeMobile" class="hidden pl-4 space-y-2 pb-2 mt-2">
+                    <a href="index.html"
+                        class="mobile-sub-link block py-2 px-4 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition"
+                        data-page="index">Home 1</a>
+                    <a href="home2.html"
+                        class="mobile-sub-link block py-2 px-4 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition"
+                        data-page="home2">Home 2</a>
+                </div>
+            </div>
+
+            <a href="about.html"
+                class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
+                data-page="about">About</a>
+            <a href="services.html"
+                class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
+                data-page="services">Services</a>
+            <a href="booking.html"
+                class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
+                data-page="booking">Booking</a>
+            <a href="pricing.html"
+                class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
+                data-page="pricing">Pricing</a>
+            <a href="contact.html"
+                class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
+                data-page="contact">Contact</a>
+
+            <!-- Mobile Dashboard Dropdown -->
+            <div class="border-b dark:border-slate-800 pb-2">
+                <button id="mobileDashboardToggle"
+                    class="w-full flex justify-between items-center py-3 px-4 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition">
+                    Dashboard <i class="fas fa-chevron-down text-xs transition-transform duration-200"
+                        id="dashMobileIcon"></i>
+                </button>
+                <div id="dashMobile" class="hidden pl-4 space-y-2 pb-2 mt-2">
+                    <a href="admin.html"
+                        class="mobile-sub-link block py-2 px-4 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition"
+                        data-page="admin">Admin</a>
+                    <a href="user.html"
+                        class="mobile-sub-link block py-2 px-4 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition"
+                        data-page="user">User</a>
+                </div>
+            </div>
+
+            <div class="pt-6 space-y-4">
+                <div class="flex items-center justify-around gap-4">
+                    <button id="ltrToggleMobile"
+                        class="flex-1 p-3 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 flex flex-col items-center gap-1 transition hover:bg-gray-200 dark:hover:bg-slate-700">
+                        <i class="fas fa-text-width"></i>
+                        <span class="text-[10px]">LTR/RTL</span>
+                    </button>
+                    <button
+                        class="darkModeBtn flex-1 p-3 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 flex flex-col items-center gap-1 transition hover:bg-gray-200 dark:hover:bg-slate-700">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-500"></i>
+                        <span class="text-[10px]">Theme</span>
+                    </button>
+                </div>
+
+                <a href="login.html"
+                    class="block py-3 text-center text-primary font-bold rounded-lg border-2 border-primary transition hover:bg-primary/10">Login</a>
+                <a href="signup.html"
+                    class="block py-3 text-center gradient-bg text-white font-bold rounded-lg shadow-md transition hover:opacity-90">Sign
+                    Up</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        // ========================
+        // 1. DARK MODE LOGIC
+        // ========================
+        const darkModeButtons = document.querySelectorAll('.darkModeBtn');
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        darkModeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                }
+            });
+        });
+
+        // ========================
+        // 2. MOBILE MENU CONTROLS - FIXED OPEN/CLOSE
+        // ========================
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('mobileMenuOverlay');
+        const body = document.body;
+
+        function openMobileMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.add('open');
+                if (overlay) overlay.classList.add('active');
+                body.classList.add('menu-open');
+            }
+        }
+
+        function closeMobileMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.remove('open');
+                if (overlay) overlay.classList.remove('active');
+                body.classList.remove('menu-open');
+            }
+        }
+
+        if (menuBtn) {
+            menuBtn.addEventListener('click', openMobileMenu);
+        }
+        if (closeMenuBtn) {
+            closeMenuBtn.addEventListener('click', closeMobileMenu);
+        }
+        if (overlay) {
+            overlay.addEventListener('click', closeMobileMenu);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu && mobileMenu.classList.contains('open')) {
+                closeMobileMenu();
+            }
+        });
+
+        function toggleMobileDropdown(id, iconId) {
+            const element = document.getElementById(id);
+            const icon = document.getElementById(iconId);
+            if (element && icon) {
+                element.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            }
+        }
+
+        const homeToggle = document.getElementById('mobileHomeToggle');
+        const dashToggle = document.getElementById('mobileDashboardToggle');
+        if (homeToggle) {
+            homeToggle.addEventListener('click', () => toggleMobileDropdown('homeMobile', 'homeMobileIcon'));
+        }
+        if (dashToggle) {
+            dashToggle.addEventListener('click', () => toggleMobileDropdown('dashMobile', 'dashMobileIcon'));
+        }
+
+        const allMobileLinks = document.querySelectorAll('.mobile-main-link, .mobile-sub-link, #mobileMenu a.block, #mobileMenu a[href]');
+        allMobileLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.getAttribute('href') && !link.classList.contains('border-2')) {
+                    setTimeout(() => {
+                        closeMobileMenu();
+                    }, 150);
+                }
+            });
+        });
+
+        // ========================
+        // 3. LTR/RTL LOGIC
+        // ========================
+        const ltrToggle = document.getElementById('ltrToggle');
+        const ltrToggleMobile = document.getElementById('ltrToggleMobile');
+        const setDirection = (btn) => {
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    const isRTL = document.documentElement.dir === 'rtl';
+                    document.documentElement.dir = isRTL ? 'ltr' : 'rtl';
+                });
+            }
+        };
+        setDirection(ltrToggle);
+        setDirection(ltrToggleMobile);
+
+        // ========================
+        // 4. ACTIVE PAGE HIGHLIGHT - UPDATED: Make HOME 2 active for about page
+        // ========================
+        function getCurrentPageId() {
+            const path = window.location.pathname;
+            const filename = path.split('/').pop() || 'about.html';
+            const page = filename.split('?')[0].split('#')[0];
+            if (page === '' || page === 'index.html') return 'index';
+            if (page === 'home2.html') return 'home2';
+            if (page === 'about.html') return 'about';
+            if (page === 'services.html') return 'services';
+            if (page === 'booking.html') return 'booking';
+            if (page === 'pricing.html') return 'pricing';
+            if (page === 'contact.html') return 'contact';
+            if (page === 'admin.html') return 'admin';
+            if (page === 'user.html') return 'user';
+            return 'about';
+        }
+
+        function clearAllActiveStates() {
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active-nav-link'));
+            document.querySelectorAll('.home-drop-item, .dashboard-drop-item').forEach(item => item.classList.remove('active-dropdown-item'));
+            document.querySelectorAll('.mobile-main-link').forEach(link => link.classList.remove('mobile-link-active'));
+            document.querySelectorAll('.mobile-sub-link').forEach(link => link.classList.remove('mobile-link-active'));
+            const desktopHomeBtn = document.getElementById('desktopHomeBtn');
+            const desktopDashBtn = document.getElementById('desktopDashboardBtn');
+            if (desktopHomeBtn) desktopHomeBtn.classList.remove('active-nav-link');
+            if (desktopDashBtn) desktopDashBtn.classList.remove('active-nav-link');
+        }
+
+        function applyActiveHighlight() {
+            const currentPage = getCurrentPageId();
+
+            // UPDATED: For about.html, activate HOME 2 (not Home 1)
+            if (currentPage === 'about') {
+                // Activate Home dropdown button with active style
+                const homeBtn = document.getElementById('desktopHomeBtn');
+                if (homeBtn) homeBtn.classList.add('active-nav-link');
+                // Activate HOME 2 (home2) as active dropdown item
+                const activeHomeChild = document.querySelector('.home-drop-item[data-page="home2"]');
+                if (activeHomeChild) activeHomeChild.classList.add('active-dropdown-item');
+                // Mobile: activate Home 2 as active sub-link
+                const mobileSubHome = document.querySelector('.mobile-sub-link[data-page="home2"]');
+                if (mobileSubHome) mobileSubHome.classList.add('mobile-link-active');
+                // Also ensure the main About link does NOT get active class
+                const aboutDesktop = document.querySelector('.nav-link[data-page="about"]');
+                if (aboutDesktop) aboutDesktop.classList.remove('active-nav-link');
+                const aboutMobile = document.querySelector('.mobile-main-link[data-page="about"]');
+                if (aboutMobile) aboutMobile.classList.remove('mobile-link-active');
+            }
+            else if (currentPage === 'index' || currentPage === 'home2') {
+                const homeBtn = document.getElementById('desktopHomeBtn');
+                if (homeBtn) homeBtn.classList.add('active-nav-link');
+                const activeHomeChild = document.querySelector(`.home-drop-item[data-page="${currentPage}"]`);
+                if (activeHomeChild) activeHomeChild.classList.add('active-dropdown-item');
+                const mobileSubHome = document.querySelector(`.mobile-sub-link[data-page="${currentPage}"]`);
+                if (mobileSubHome) mobileSubHome.classList.add('mobile-link-active');
+            }
+            else if (currentPage === 'admin' || currentPage === 'user') {
+                const dashBtn = document.getElementById('desktopDashboardBtn');
+                if (dashBtn) dashBtn.classList.add('active-nav-link');
+                const activeDashChild = document.querySelector(`.dashboard-drop-item[data-page="${currentPage}"]`);
+                if (activeDashChild) activeDashChild.classList.add('active-dropdown-item');
+                const mobileSubDash = document.querySelector(`.mobile-sub-link[data-page="${currentPage}"]`);
+                if (mobileSubDash) mobileSubDash.classList.add('mobile-link-active');
+            }
+            else {
+                const desktopLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+                if (desktopLink) desktopLink.classList.add('active-nav-link');
+                const mobileLink = document.querySelector(`.mobile-main-link[data-page="${currentPage}"]`);
+                if (mobileLink) mobileLink.classList.add('mobile-link-active');
+            }
+        }
+
+        function addDataAttributes() {
+            document.querySelectorAll('.nav-link[href="about.html"]').forEach(el => el.setAttribute('data-page', 'about'));
+            document.querySelectorAll('.nav-link[href="services.html"]').forEach(el => el.setAttribute('data-page', 'services'));
+            document.querySelectorAll('.nav-link[href="booking.html"]').forEach(el => el.setAttribute('data-page', 'booking'));
+            document.querySelectorAll('.nav-link[href="pricing.html"]').forEach(el => el.setAttribute('data-page', 'pricing'));
+            document.querySelectorAll('.nav-link[href="contact.html"]').forEach(el => el.setAttribute('data-page', 'contact'));
+            document.querySelectorAll('.mobile-main-link[href="about.html"]').forEach(el => el.setAttribute('data-page', 'about'));
+            document.querySelectorAll('.mobile-main-link[href="services.html"]').forEach(el => el.setAttribute('data-page', 'services'));
+            document.querySelectorAll('.mobile-main-link[href="booking.html"]').forEach(el => el.setAttribute('data-page', 'booking'));
+            document.querySelectorAll('.mobile-main-link[href="pricing.html"]').forEach(el => el.setAttribute('data-page', 'pricing'));
+            document.querySelectorAll('.mobile-main-link[href="contact.html"]').forEach(el => el.setAttribute('data-page', 'contact'));
+        }
+
+        window.addEventListener('popstate', () => {
+            clearAllActiveStates();
+            applyActiveHighlight();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            addDataAttributes();
+            clearAllActiveStates();
+            applyActiveHighlight();
+        });
+    </script>
+
+
+
+
+    <section
+        class="pt-20 min-h-screen flex items-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-900/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center max-w-3xl mx-auto">
+                <span
+                    class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">Welcome
+                    to ColorCraft</span>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                    <span class="gradient-text">Painting</span><br>
+                    Made Simple
+                </h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-xl mx-auto">
+                    Expert interior painting and color consulting that transforms your space into a masterpiece.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="booking.html"
+                        class="px-8 py-4 gradient-bg text-white font-semibold rounded-full hover:opacity-90 transition shadow-lg shadow-primary/30">
+                        Start Your Project <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="about.html"
+                        class="px-8 py-4 bg-white dark:bg-slate-800 text-gray-800 dark:text-white font-semibold rounded-full border-2 border-gray-200 dark:border-slate-700 hover:border-primary transition">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white dark:bg-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-primary font-semibold">Color Palettes</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Trending Color Schemes</h2>
+                <p class="text-gray-600 dark:text-gray-300">Explore our curated collection of popular color palettes for
+                    every style.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="group cursor-pointer">
+                    <div class="flex rounded-2xl overflow-hidden shadow-lg mb-4 h-40">
+                        <div class="flex-1 bg-gray-100 group-hover:scale-105 transition duration-500"></div>
+                        <div class="flex-1 bg-gray-300 group-hover:scale-105 transition duration-500 delay-75"></div>
+                        <div class="flex-1 bg-gray-500 group-hover:scale-105 transition duration-500 delay-100"></div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Modern Grays</h3>
+                    <p class="text-gray-500 text-sm">Sophisticated neutrals for contemporary spaces</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="flex rounded-2xl overflow-hidden shadow-lg mb-4 h-40">
+                        <div class="flex-1 bg-blue-100 group-hover:scale-105 transition duration-500"></div>
+                        <div class="flex-1 bg-blue-300 group-hover:scale-105 transition duration-500 delay-75"></div>
+                        <div class="flex-1 bg-blue-500 group-hover:scale-105 transition duration-500 delay-100"></div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Ocean Blues</h3>
+                    <p class="text-gray-500 text-sm">Calming tones inspired by the sea</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="flex rounded-2xl overflow-hidden shadow-lg mb-4 h-40">
+                        <div class="flex-1 bg-green-100 group-hover:scale-105 transition duration-500"></div>
+                        <div class="flex-1 bg-green-300 group-hover:scale-105 transition duration-500 delay-75"></div>
+                        <div class="flex-1 bg-green-600 group-hover:scale-105 transition duration-500 delay-100"></div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Nature Greens</h3>
+                    <p class="text-gray-500 text-sm">Fresh and earthy natural palette</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="flex rounded-2xl overflow-hidden shadow-lg mb-4 h-40">
+                        <div class="flex-1 bg-rose-100 group-hover:scale-105 transition duration-500"></div>
+                        <div class="flex-1 bg-rose-300 group-hover:scale-105 transition duration-500 delay-75"></div>
+                        <div class="flex-1 bg-rose-500 group-hover:scale-105 transition duration-500 delay-100"></div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Warm Roses</h3>
+                    <p class="text-gray-500 text-sm">Cozy and inviting pink tones</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="flex rounded-2xl overflow-hidden shadow-lg mb-4 h-40">
+                        <div class="flex-1 bg-amber-100 group-hover:scale-105 transition duration-500"></div>
+                        <div class="flex-1 bg-amber-300 group-hover:scale-105 transition duration-500 delay-75"></div>
+                        <div class="flex-1 bg-amber-600 group-hover:scale-105 transition duration-500 delay-100"></div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Sunset Warmth</h3>
+                    <p class="text-gray-500 text-sm">Warm golden hour inspired</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="flex rounded-2xl overflow-hidden shadow-lg mb-4 h-40">
+                        <div class="flex-1 bg-indigo-100 group-hover:scale-105 transition duration-500"></div>
+                        <div class="flex-1 bg-indigo-300 group-hover:scale-105 transition duration-500 delay-75"></div>
+                        <div class="flex-1 bg-indigo-600 group-hover:scale-105 transition duration-500 delay-100"></div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Royal Purples</h3>
+                    <p class="text-gray-500 text-sm">Luxurious and elegant tones</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gray-50 dark:bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-primary font-semibold">Transformation</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Before & After</h2>
+                <p class="text-gray-600 dark:text-gray-300">See the magic of professional painting in action.</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="before-after-slider rounded-2xl overflow-hidden shadow-2xl relative h-[500px]">
+                    <img src="img/home1-1.jpg"
+                        alt="After painting" class="w-full h-full object-cover">
+                    <div class="before-image">
+                        <img src="img/home1-2.jpg"
+                            alt="Before painting" class="w-full h-full object-cover">
+                    </div>
+                    <div class="slider-handle"></div>
+                    <div
+                        class="absolute top-4 left-4 bg-white/90 dark:bg-slate-800/90 px-4 py-2 rounded-lg font-medium text-sm">
+                        Before</div>
+                    <div
+                        class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 px-4 py-2 rounded-lg font-medium text-sm">
+                        After</div>
+                </div>
+                <p class="text-center text-gray-500 mt-4">Drag the slider to compare the transformation</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white dark:bg-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-primary font-semibold">Our Process</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">How It Works</h2>
+                <p class="text-gray-600 dark:text-gray-300">A simple, streamlined process from consultation to
+                    completion.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-8">
+                    <div
+                        class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                        <i class="fas fa-comments text-white text-2xl"></i>
+                        <div
+                            class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+                            1</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Consultation</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Share your vision with us. We'll discuss colors,
+                        finishes, and create a detailed plan.</p>
+                </div>
+                <div class="text-center p-8">
+                    <div
+                        class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                        <i class="fas fa-paint-roller text-white text-2xl"></i>
+                        <div
+                            class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+                            2</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Painting</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Our expert team brings your vision to life with
+                        precision and care.</p>
+                </div>
+                <div class="text-center p-8">
+                    <div
+                        class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                        <i class="fas fa-sparkles text-white text-2xl"></i>
+                        <div
+                            class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+                            3</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Finish</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Final touches and quality inspection. Enjoy your
+                        beautifully transformed space!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gray-50 dark:bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-primary font-semibold">Reviews</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Client Love</h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="img/home1-3.jpg" alt="Jennifer Lee"
+                            class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <div class="font-bold">Jennifer Lee</div>
+                            <div class="text-sm text-yellow-500">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">"Absolutely love my new living room! The color
+                        suggestions were perfect."</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="img/home1-4.jpg" alt="David Park"
+                            class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <div class="font-bold">David Park</div>
+                            <div class="text-sm text-yellow-500">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">"Professional team, clean work, and beautiful
+                        results. Highly recommend!"</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="img/home1-5.jpg" alt="Amanda Torres"
+                            class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <div class="font-bold">Amanda Torres</div>
+                            <div class="text-sm text-yellow-500">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">"They transformed my outdated kitchen into
+                        something modern and beautiful."</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="img/home1-6.jpg" alt="Robert Kim"
+                            class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <div class="font-bold">Robert Kim</div>
+                            <div class="text-sm text-yellow-500">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">"Exceptional attention to detail. My home looks
+                        like it belongs in a magazine!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Stay Updated</h2>
+            <p class="text-white/90 mb-8">Subscribe to our newsletter for color tips, trends, and exclusive offers.</p>
+            <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto"
+                onsubmit="event.preventDefault(); showToast('Thanks for subscribing!', 'success');">
+                <input type="email" placeholder="Enter your email"
+                    class="flex-1 px-6 py-4 rounded-full focus:outline-none focus:ring-4 focus:ring-white/30" required>
+                <button type="submit"
+                    class="px-8 py-4 bg-white text-primary font-bold rounded-full hover:bg-gray-100 transition">
+                    Subscribe <i class="fas fa-paper-plane ml-2"></i>
+                </button>
+            </form>
+            <p class="text-white/60 text-sm mt-4">No spam, unsubscribe anytime.</p>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <a href="index.html" class="flex items-center gap-2 mb-6 hover:opacity-90 transition-opacity">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                            <i class="fas fa-paint-roller text-white text-xl"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">ColorCraft</span>
+                    </a>
+                    <p class="text-gray-400 mb-6">Transforming homes with expert painting and color consulting since
+                        2009. Your vision, our expertise.</p>
+                    <div class="flex gap-4">
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition">Home</a></li>
+
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="services.html" class="text-gray-400 hover:text-white transition">Services</a></li>
+                        <li><a href="booking.html" class="text-gray-400 hover:text-white transition">Booking</a></li>
+                        <li><a href="pricing.html" class="text-gray-400 hover:text-white transition">Pricing</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-6">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="services.html" class="text-gray-400 hover:text-white transition">Interior
+                                Painting</a></li>
+                        <li><a href="services.html" class="text-gray-400 hover:text-white transition">Color
+                                Consultation</a></li>
+                        <li><a href="services.html" class="text-gray-400 hover:text-white transition">Wall Textures</a>
+                        </li>
+                        <li><a href="services.html" class="text-gray-400 hover:text-white transition">Waterproof
+                                Coating</a></li>
+                        <li><a href="services.html" class="text-gray-400 hover:text-white transition">Decorative
+                                Finishes</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-6">Contact Info</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt text-primary mt-1"></i>
+                            <span class="text-gray-400">123 Paint Street, Austin, TX 78701</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-phone text-primary"></i>
+                            <span class="text-gray-400">(555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-primary"></i>
+                            <span class="text-gray-400">info@colorcraft.com</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-clock text-primary"></i>
+                            <span class="text-gray-400">Mon-Sat: 8AM - 6PM</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 ColorCraft. All rights reserved. | Designed with <i
+                        class="fas fa-heart text-red-500"></i> for beautiful homes</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
