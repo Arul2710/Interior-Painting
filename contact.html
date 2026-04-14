@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
 <head>
@@ -166,7 +166,7 @@
                 </a>
 
                 <!-- Desktop Navigation -->
-                <div class="hidden lg:flex items-center gap-8">
+                <div class="hidden lg:flex items-center lg:gap-4 xl:gap-8">
                     <!-- Home Dropdown -->
                     <div class="relative group">
                         <button id="desktopHomeBtn"
@@ -192,9 +192,9 @@
                     <a href="booking.html"
                         class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
                         data-page="booking">Booking</a>
-                    <a href="pricing.html"
+                    <a href="gallery.html"
                         class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
-                        data-page="pricing">Pricing</a>
+                        data-page="gallery">Gallery</a>
                     <a href="contact.html"
                         class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
                         data-page="contact">Contact</a>
@@ -218,7 +218,7 @@
                 </div>
 
                 <!-- Desktop Right Buttons -->
-                <div class="hidden lg:flex items-center gap-4">
+                <div class="hidden lg:flex items-center lg:gap-2 xl:gap-4">
                     <button id="ltrToggle"
                         class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition text-gray-600 dark:text-gray-300">
                         <i class="fas fa-text-width"></i>
@@ -286,9 +286,9 @@
             <a href="booking.html"
                 class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
                 data-page="booking">Booking</a>
-            <a href="pricing.html"
+            <a href="gallery.html"
                 class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
-                data-page="pricing">Pricing</a>
+                data-page="gallery">Gallery</a>
             <a href="contact.html"
                 class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
                 data-page="contact">Contact</a>
@@ -455,7 +455,7 @@
             if (page === 'about.html') return 'about';
             if (page === 'services.html') return 'services';
             if (page === 'booking.html') return 'booking';
-            if (page === 'pricing.html') return 'pricing';
+            if (page === 'gallery.html') return 'gallery';
             if (page === 'contact.html') return 'contact';
             if (page === 'admin.html') return 'admin';
             if (page === 'user.html') return 'user';
@@ -533,12 +533,12 @@
             document.querySelectorAll('.nav-link[href="about.html"]').forEach(el => el.setAttribute('data-page', 'about'));
             document.querySelectorAll('.nav-link[href="services.html"]').forEach(el => el.setAttribute('data-page', 'services'));
             document.querySelectorAll('.nav-link[href="booking.html"]').forEach(el => el.setAttribute('data-page', 'booking'));
-            document.querySelectorAll('.nav-link[href="pricing.html"]').forEach(el => el.setAttribute('data-page', 'pricing'));
+            document.querySelectorAll('.nav-link[href="gallery.html"]').forEach(el => el.setAttribute('data-page', 'gallery'));
             document.querySelectorAll('.nav-link[href="contact.html"]').forEach(el => el.setAttribute('data-page', 'contact'));
             document.querySelectorAll('.mobile-main-link[href="about.html"]').forEach(el => el.setAttribute('data-page', 'about'));
             document.querySelectorAll('.mobile-main-link[href="services.html"]').forEach(el => el.setAttribute('data-page', 'services'));
             document.querySelectorAll('.mobile-main-link[href="booking.html"]').forEach(el => el.setAttribute('data-page', 'booking'));
-            document.querySelectorAll('.mobile-main-link[href="pricing.html"]').forEach(el => el.setAttribute('data-page', 'pricing'));
+            document.querySelectorAll('.mobile-main-link[href="gallery.html"]').forEach(el => el.setAttribute('data-page', 'gallery'));
             document.querySelectorAll('.mobile-main-link[href="contact.html"]').forEach(el => el.setAttribute('data-page', 'contact'));
         }
 
@@ -769,7 +769,7 @@
                         <li><a href="about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
                         <li><a href="services.html" class="text-gray-400 hover:text-white transition">Services</a></li>
                         <li><a href="booking.html" class="text-gray-400 hover:text-white transition">Booking</a></li>
-                        <li><a href="pricing.html" class="text-gray-400 hover:text-white transition">Pricing</a></li>
+                        <li><a href="gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
                         <li><a href="contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
                     </ul>
                 </div>

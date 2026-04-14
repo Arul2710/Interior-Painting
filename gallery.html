@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ColorCraft - About Us | Professional Painting & Color Consulting</title>
+    <title>ColorCraft - Gallery | Professional Painting & Color Consulting</title>
     <link rel="stylesheet" href="css/styles.css">
 <link rel="icon" type="image/png" href="img/fav-icons1.png">
     <script src="tailwind.js"></script>
@@ -166,7 +166,7 @@
                 </a>
 
                 <!-- Desktop Navigation -->
-                <div class="hidden lg:flex items-center gap-8">
+                <div class="hidden lg:flex items-center lg:gap-4 xl:gap-8">
                     <!-- Home Dropdown -->
                     <div class="relative group">
                         <button id="desktopHomeBtn"
@@ -192,9 +192,9 @@
                     <a href="booking.html"
                         class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
                         data-page="booking">Booking</a>
-                    <a href="pricing.html"
+                    <a href="gallery.html"
                         class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
-                        data-page="pricing">Pricing</a>
+                        data-page="gallery">Gallery</a>
                     <a href="contact.html"
                         class="nav-link text-gray-600 dark:text-gray-300 hover:text-primary transition"
                         data-page="contact">Contact</a>
@@ -218,7 +218,7 @@
                 </div>
 
                 <!-- Desktop Right Buttons -->
-                <div class="hidden lg:flex items-center gap-4">
+                <div class="hidden lg:flex items-center lg:gap-2 xl:gap-4">
                     <button id="ltrToggle"
                         class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition text-gray-600 dark:text-gray-300">
                         <i class="fas fa-text-width"></i>
@@ -286,9 +286,9 @@
             <a href="booking.html"
                 class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
                 data-page="booking">Booking</a>
-            <a href="pricing.html"
+            <a href="gallery.html"
                 class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
-                data-page="pricing">Pricing</a>
+                data-page="gallery">Gallery</a>
             <a href="contact.html"
                 class="mobile-main-link block py-3 px-4 text-gray-600 dark:text-gray-300 font-medium border-b dark:border-slate-800 transition hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
                 data-page="contact">Contact</a>
@@ -456,7 +456,7 @@
             if (page === 'about.html') return 'about';
             if (page === 'services.html') return 'services';
             if (page === 'booking.html') return 'booking';
-            if (page === 'pricing.html') return 'pricing';
+            if (page === 'gallery.html') return 'gallery';
             if (page === 'contact.html') return 'contact';
             if (page === 'admin.html') return 'admin';
             if (page === 'user.html') return 'user';
@@ -530,12 +530,12 @@
             document.querySelectorAll('.nav-link[href="about.html"]').forEach(el => el.setAttribute('data-page', 'about'));
             document.querySelectorAll('.nav-link[href="services.html"]').forEach(el => el.setAttribute('data-page', 'services'));
             document.querySelectorAll('.nav-link[href="booking.html"]').forEach(el => el.setAttribute('data-page', 'booking'));
-            document.querySelectorAll('.nav-link[href="pricing.html"]').forEach(el => el.setAttribute('data-page', 'pricing'));
+            document.querySelectorAll('.nav-link[href="gallery.html"]').forEach(el => el.setAttribute('data-page', 'gallery'));
             document.querySelectorAll('.nav-link[href="contact.html"]').forEach(el => el.setAttribute('data-page', 'contact'));
             document.querySelectorAll('.mobile-main-link[href="about.html"]').forEach(el => el.setAttribute('data-page', 'about'));
             document.querySelectorAll('.mobile-main-link[href="services.html"]').forEach(el => el.setAttribute('data-page', 'services'));
             document.querySelectorAll('.mobile-main-link[href="booking.html"]').forEach(el => el.setAttribute('data-page', 'booking'));
-            document.querySelectorAll('.mobile-main-link[href="pricing.html"]').forEach(el => el.setAttribute('data-page', 'pricing'));
+            document.querySelectorAll('.mobile-main-link[href="gallery.html"]').forEach(el => el.setAttribute('data-page', 'gallery'));
             document.querySelectorAll('.mobile-main-link[href="contact.html"]').forEach(el => el.setAttribute('data-page', 'contact'));
         }
 
@@ -575,19 +575,19 @@
             </span>
             
             <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-8 leading-tight">
-                Premium Quality <br>
+                Our Work <br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 italic">
-                    Within Your Budget
+                    Project Gallery
                 </span>
             </h1>
             
             <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-                Flexible pricing options to fit your needs and budget. All packages include our 100% quality guarantee and expert consulting.
+                Explore our portfolio of transformed spaces. From modern living rooms to serene bedrooms, see the ColorCraft difference.
             </p>
 
             <div class="flex flex-col sm:flex-row gap-5 justify-center mb-16">
                 <a href="#plans" class="px-10 py-4 gradient-bg hover:bg-indigo-700 text-white font-bold rounded-full transition-all transform hover:scale-105 shadow-xl shadow-indigo-500/25">
-                    View Pricing Plans
+                    Explore Projects
                 </a>
                 <a href="#contact" class="px-10 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur-md border border-white/20 transition-all">
                     Custom Quote
@@ -761,7 +761,7 @@
     <section class="py-20 bg-gray-50 dark:bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Additional Services</h2>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">ColorCraft Gallery</h2>
                 <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">Enhance your painting project with our add-on services.</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -876,7 +876,7 @@
                         <li><a href="about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
                         <li><a href="services.html" class="text-gray-400 hover:text-white transition">Services</a></li>
                         <li><a href="booking.html" class="text-gray-400 hover:text-white transition">Booking</a></li>
-                        <li><a href="pricing.html" class="text-gray-400 hover:text-white transition">Pricing</a></li>
+                        <li><a href="gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
                         <li><a href="contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
                     </ul>
                 </div>
